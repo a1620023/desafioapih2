@@ -10,16 +10,18 @@ public class RateExchange {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
-    String currencyType; // tipo de moneda
+    String entryCurrencyType; // tipo de moneda
+    String departureCurrencyType;
     double purchasePrice; // precio de compra
     double sellingPrice; // preco de venta
 
     public RateExchange() {
     }
 
-    public RateExchange(Long id, String currencyType, double purchasePrice, double sellingPrice) {
+    public RateExchange(Long id, String entryCurrencyType, String departureCurrencyType, double purchasePrice, double sellingPrice) {
         this.id = id;
-        this.currencyType = currencyType;
+        this.entryCurrencyType = entryCurrencyType;
+        this.departureCurrencyType = departureCurrencyType;
         this.purchasePrice = purchasePrice;
         this.sellingPrice = sellingPrice;
     }
@@ -32,12 +34,20 @@ public class RateExchange {
         this.id = id;
     }
 
-    public String getCurrencyType() {
-        return currencyType;
+    public String getEntryCurrencyType() {
+        return entryCurrencyType;
     }
 
-    public void setCurrencyType(String currencyType) {
-        this.currencyType = currencyType;
+    public void setEntryCurrencyType(String entryCurrencyType) {
+        this.entryCurrencyType = entryCurrencyType;
+    }
+
+    public String getDepartureCurrencyType() {
+        return departureCurrencyType;
+    }
+
+    public void setDepartureCurrencyType(String departureCurrencyType) {
+        this.departureCurrencyType = departureCurrencyType;
     }
 
     public double getPurchasePrice() {
@@ -61,19 +71,20 @@ public class RateExchange {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RateExchange that = (RateExchange) o;
-        return id.equals(that.id) && currencyType.equals(that.currencyType);
+        return id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, currencyType);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
-        return "RateExchamnge{" +
+        return "RateExchange{" +
                 "id=" + id +
-                ", currencyType='" + currencyType + '\'' +
+                ", entryCurrencyType='" + entryCurrencyType + '\'' +
+                ", departureCurrencyType='" + departureCurrencyType + '\'' +
                 ", purchasePrice=" + purchasePrice +
                 ", sellingPrice=" + sellingPrice +
                 '}';

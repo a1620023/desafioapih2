@@ -1,20 +1,13 @@
 package io.emelceledonio.DesafioAPIH2.Service;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import io.emelceledonio.DesafioAPIH2.Model.CurrencyExchange;
-import io.emelceledonio.DesafioAPIH2.Model.RateExchange;
 import io.emelceledonio.DesafioAPIH2.Repository.CurrencyExchangeRepository;
 import io.emelceledonio.DesafioAPIH2.Repository.RateExchangeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -51,20 +44,60 @@ public class CurrencyExchangeService {
     }
 
     public HashMap<String, Object> conferCurrencyExchange(CurrencyExchange currencyExchange){
-        var monto = currencyExchange.getAmount();
-        var tipocambio = rateExchangeServiceCES.getByIdService(1L);//.get().getCurrencyType();
-        var monedaorigen = tipocambio.get().getCurrencyType();
-        var preciocompra = tipocambio.get().getPurchasePrice();
-        var montoresultante = monto*tipocambio.get().getPurchasePrice();
 
+        var monto = currencyExchange.getAmount();
+        var tipocambio = rateExchangeServiceCES.getRateExchangeService();
+
+        var ece = currencyExchange.getEntryCurrency();
+        var dce = currencyExchange.getDepartureCurrency();
 
         HashMap<String, Object> map = new HashMap<>();
-        map.put("monto", monto);
-        map.put("monedaorigen", monedaorigen);
-        map.put("monedadestino", currencyExchange.getDepartureCurrency());
-        map.put("tipodecambio", preciocompra);
-        map.put("montocontipocambio", montoresultante);
 
+        System.out.println("Esto es lo que mando: "+currencyExchange.getEntryCurrency());
+
+        for (int i=0; i<tipocambio.size();i++){
+            var mivar = tipocambio.get(i);
+            var ect = mivar.getEntryCurrencyType();
+            var dct = mivar.getDepartureCurrencyType();
+            var pp = mivar.getPurchasePrice();
+            var sp = mivar.getSellingPrice();
+
+            double tc = 0.0;
+            double montototal=0.0;
+
+            if ((ect.equals(ece) && dct.equals(dce)) || (dct.equals(ece) && ect.equals(dce))){
+                if (ece.equals(ect)){
+                    System.out.println("el cliente quiere vender sus: "+ect);
+                    System.out.println("multiplica=> es precio de compra");
+                    montototal= monto*pp;
+                    tc = pp;
+
+                    map.put("monedaorigen", ect);
+                    map.put("monedadestino", dct);
+
+
+                }else if (ece.equals(dct)){
+                    System.out.println("el cliente quiere comprar: "+ect);
+                    System.out.println("divide=> es precio de venta");
+                    montototal = monto/sp;
+                    tc = sp;
+
+                    map.put("monedaorigen", dct);
+                    map.put("monedadestino", ect);
+
+
+                }else {
+                    System.out.println("No existe esta operacion");
+                }
+
+                map.put("monto", monto);
+                map.put("tipodecambio", tc);
+                map.put("montocontipocambio", montototal);
+
+            }else {
+                System.out.println("ninguno");
+            }
+        }
         return map;
     }
 }
