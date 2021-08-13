@@ -22,28 +22,28 @@ public class CurrencyExchangeService {
     @Autowired
     RateExchangeService rateExchangeServiceCES;
 
-    public ArrayList<CurrencyExchange> getCurrencyExchangeService(){
+    public ArrayList<CurrencyExchange> getCurrencyExchangeService() {
         return (ArrayList<CurrencyExchange>) currencyExchangeRepository.findAll();
     }
 
-    public CurrencyExchange saveCurrencyExchangeService(CurrencyExchange currencyExchange){
+    public CurrencyExchange saveCurrencyExchangeService(CurrencyExchange currencyExchange) {
         return currencyExchangeRepository.save(currencyExchange);
     }
 
-    public Optional<CurrencyExchange> getByIdService(Long id){
+    public Optional<CurrencyExchange> getByIdService(Long id) {
         return currencyExchangeRepository.findById(id);
     }
 
-    public boolean deleteCurrencyExchangeService(Long id){
+    public boolean deleteCurrencyExchangeService(Long id) {
         try {
             currencyExchangeRepository.deleteById(id);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public HashMap<String, Object> conferCurrencyExchange(CurrencyExchange currencyExchange){
+    public HashMap<String, Object> conferCurrencyExchange(CurrencyExchange currencyExchange) {
 
         var monto = currencyExchange.getAmount();
         var tipocambio = rateExchangeServiceCES.getRateExchangeService();
@@ -53,9 +53,9 @@ public class CurrencyExchangeService {
 
         HashMap<String, Object> map = new HashMap<>();
 
-        System.out.println("Esto es lo que mando: "+currencyExchange.getEntryCurrency());
+        System.out.println("Esto es lo que mando: " + currencyExchange.getEntryCurrency());
 
-        for (int i=0; i<tipocambio.size();i++){
+        for (int i = 0; i < tipocambio.size(); i++) {
             var mivar = tipocambio.get(i);
             var ect = mivar.getEntryCurrencyType();
             var dct = mivar.getDepartureCurrencyType();
@@ -63,30 +63,30 @@ public class CurrencyExchangeService {
             var sp = mivar.getSellingPrice();
 
             double tc = 0.0;
-            double montototal=0.0;
+            double montototal = 0.0;
 
-            if ((ect.equals(ece) && dct.equals(dce)) || (dct.equals(ece) && ect.equals(dce))){
-                if (ece.equals(ect)){
-                    System.out.println("el cliente quiere vender sus: "+ect);
+            if ((ect.equals(ece) && dct.equals(dce)) || (dct.equals(ece) && ect.equals(dce))) {
+                if (ece.equals(ect)) {
+                    System.out.println("el cliente quiere vender sus: " + ect);
                     System.out.println("multiplica=> es precio de compra");
-                    montototal= monto*pp;
+                    montototal = monto * pp;
                     tc = pp;
 
                     map.put("monedaorigen", ect);
                     map.put("monedadestino", dct);
 
 
-                }else if (ece.equals(dct)){
-                    System.out.println("el cliente quiere comprar: "+ect);
+                } else if (ece.equals(dct)) {
+                    System.out.println("el cliente quiere comprar: " + ect);
                     System.out.println("divide=> es precio de venta");
-                    montototal = monto/sp;
+                    montototal = monto / sp;
                     tc = sp;
 
                     map.put("monedaorigen", dct);
                     map.put("monedadestino", ect);
 
 
-                }else {
+                } else {
                     System.out.println("No existe esta operacion");
                 }
 
@@ -94,7 +94,7 @@ public class CurrencyExchangeService {
                 map.put("tipodecambio", tc);
                 map.put("montocontipocambio", montototal);
 
-            }else {
+            } else {
                 System.out.println("ninguno");
             }
         }

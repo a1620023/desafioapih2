@@ -15,17 +15,17 @@ public class CurrencyExchangeController {
     CurrencyExchangeService currencyExchangeService;
 
     @GetMapping()
-    public ArrayList<CurrencyExchange> getCurrencyExchange(){
+    public ArrayList<CurrencyExchange> getCurrencyExchange() {
         return currencyExchangeService.getCurrencyExchangeService();
     }
 
     @PostMapping()
-    public CurrencyExchange saveCurrencyExchange(@RequestBody CurrencyExchange currencyExchange){
+    public CurrencyExchange saveCurrencyExchange(@RequestBody CurrencyExchange currencyExchange) {
         return this.currencyExchangeService.saveCurrencyExchangeService(currencyExchange);
     }
 
     @PostMapping(path = "/cce")
-    public Object conferCurrencyExchange(@RequestBody CurrencyExchange currencyExchange){
+    public Object conferCurrencyExchange(@RequestBody CurrencyExchange currencyExchange) {
         return this.currencyExchangeService.conferCurrencyExchange(currencyExchange);
     }
 }

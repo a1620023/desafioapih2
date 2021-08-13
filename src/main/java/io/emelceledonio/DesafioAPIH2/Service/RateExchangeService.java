@@ -14,23 +14,23 @@ public class RateExchangeService {
     @Autowired
     RateExchangeRepository rateExchangeRepository;
 
-    public ArrayList<RateExchange> getRateExchangeService(){
+    public ArrayList<RateExchange> getRateExchangeService() {
         return (ArrayList<RateExchange>) rateExchangeRepository.findAll();
     }
 
-    public RateExchange saveRateExchangeService(RateExchange rateExchange){
+    public RateExchange saveRateExchangeService(RateExchange rateExchange) {
         return rateExchangeRepository.save(rateExchange);
     }
 
-    public Optional<RateExchange> getByIdService(Long id){
+    public Optional<RateExchange> getByIdService(Long id) {
         return rateExchangeRepository.findById(id);
     }
 
-    public boolean deleteRateExchangeService(Long id){
+    public boolean deleteRateExchangeService(Long id) {
         try {
             rateExchangeRepository.deleteById(id);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
